@@ -1,7 +1,7 @@
 
 //  https://www.interviewbit.com/problems/zigzag-string/
 
-#include <ios tream>
+#include <iostream>
 #include <vector>
 #include <string>
 

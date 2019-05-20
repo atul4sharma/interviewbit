@@ -4,10 +4,9 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include <functional>
 
 
-auto search_pivot(const std::vector<int> & A, std::size_t const first, std::size_t const last)
+auto search_pivot(std::vector<int> const & A, std::size_t const first, std::size_t const last)
     -> std::size_t
 {
     if( first == last )
