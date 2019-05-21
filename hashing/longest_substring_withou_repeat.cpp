@@ -19,6 +19,8 @@ auto operator << (std::ostream & out, std::vector<T> const & v)
 
 int longestUniqueSubsttr(std::string const & str) 
 { 
+    if(str.empty())
+        return 0;
     auto current_length = 1;
     auto max_length     = 1; // result
     auto prev_index     = 0; // previous index
@@ -53,7 +55,7 @@ int longestUniqueSubsttr(std::string const & str)
 
 int main()
 {
-    std::cout << longestUniqueSubsttr(std::string{"abcabcbb"}) << "\n";
+    std::cout << longestUniqueSubsttr(std::string{"geeksforgeeks"}) << "\n";
     return 0;
 }
 
