@@ -16,50 +16,58 @@ auto operator << (std::ostream & out,  std::vector<int> const & A)
     return out;
 }
 
-auto to_int(std::vector<int> const & A)
-    -> int
-{
-    std::size_t result{};
-    for(std::size_t i = 0 ; i < A.size() ; ++i)
-    {
-        result += std::pow(2, A.size() - i -1 ) * A[i];
-    }
-    return result;
-}
-
-auto to_binary(int a)
-    -> std::vector<int>
-{
-    std::vector<int> result{};
-
-    while(a)
-    {
-        result.push_back(a%2);
-        a = a/2;
-    }
-    std::reverse(result.begin(), result.end());
-    return result;
-}
-
-auto flip(int & a)
+auto concat(char                       prefix
+           ,std::vector<std::string> & vec)
     -> void
 {
-    a = (a == 0) ? 1: 0;
+    for(auto & item : vec)
+        item = prefix + item;
+}
+
+auto gray_code_impl(std::vector<std::vector<std::string>>       & pool
+                   ,int                                   const   n)
+    -> std::vector<std::string>
+{
+    if( n == 0 )
+    {
+        pool[n] = std::vector<std::string>{"0", "1"};
+        return pool[n];
+    }
+
+    auto prev = gray_code_impl(pool, n-1);
+    auto rev  = prev;
+    std::reverse(rev.begin(), rev.end());
+    concat('0', prev);
+    concat('1', rev );
+    prev.insert(prev.end(), std::make_move_iterator(rev.begin()), std::make_move_iterator(rev.end()));
+
+    pool[n] = prev;
+    return pool[n];
+
 }
 
 std::vector<int> grayCode(int const A) 
 {
-    std::vector<int> result{0};
-    
+    if( A == 0 )
+    return std::vector<int>{};
 
+    auto pool = std::vector<std::vector<std::string>>(A);
+    auto res = gray_code_impl(pool, A-1);
+
+    auto const to_num = [](std::string a)
+    {
+        return std::stoi(std::move(a), nullptr, 2);
+    };
+
+    auto result = std::vector<int>{};
+    std::transform(res.begin(), res.end(), std::back_inserter(result), to_num);
     return result;
+    
 }
 
-
-int main()
+int main(int argc, char ** argv)
 {
-    std::cout << to_binary(10) << "\n";
-    std::cout << to_int(std::vector<int>{1,0,1,0}) << "\n";
-    std::cout << grayCode(2) << "\n";
+    int num = std::stoi(argv[1]);
+    std::cout << grayCode(num) << "\n";
     return 0;
 }
