@@ -31,7 +31,7 @@ auto operator << (std::ostream & out, std::vector<std::vector<int>> const & A)
 
 auto prepend(std::size_t                      val
             ,std::vector<std::vector<int>> & v)
-    -> std::vector<std::vector<int>>
+    -> void
 {
     for(auto & row : v)
     {
@@ -39,7 +39,6 @@ auto prepend(std::size_t                      val
         std::rotate(row.begin(), row.end() - 1, row.end());
         //std::cout << "row is " << row << "\t";
     }
-    return v;
 }
 
 template <typename Iter>
@@ -55,8 +54,8 @@ auto subsets_impl(Iter first
     auto _subsets = subsets_impl(next_iter, last);
     for(auto const & item : _subsets)
         final_result.emplace_back(item);
-    auto rest_subsets = prepend(*first, _subsets);
-    for(auto const & item : rest_subsets)
+    prepend(*first, _subsets);
+    for(auto const & item : _subsets)
         final_result.emplace_back(item);
     return final_result;
 }
@@ -69,7 +68,7 @@ std::vector<std::vector<int> > subsetsWithDup(std::vector<int> & A)
 
 int main()
 {
-    auto v = std::vector<int>{1,2,2};
+    auto v = std::vector<int>{1,2,3,4};
     auto result = subsetsWithDup(v);
     result.push_back(std::vector<int>{});
     std::sort(result.begin()
